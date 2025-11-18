@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог цветов - Flowers F</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .catalog-header {
+            text-align: center;
+            padding: 3rem 5%;
+            background: var(--gradient-primary);
+            color: white;
+            margin-bottom: 3rem;
+        }
+
+        .catalog-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .catalog-header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            color: white;
+            text-decoration: none;
+            padding: 0.7rem 1.5rem;
+            border: 2px solid white;
+            border-radius: 50px;
+            transition: var(--transition);
+        }
+
+        .back-link:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .btn-details {
+            background: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+            padding: 0.7rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            flex: 1;
+        }
+
+        .btn-details:hover {
+            background: var(--secondary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.3);
+        }
+
+        /* Модальное окно с подробной информацией */
+        .details-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .details-modal-content {
+            background-color: var(--white);
+            border-radius: 20px;
+            padding: 0;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: modalFade 0.3s;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .details-modal-header {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 2rem;
+            border-radius: 20px 20px 0 0;
+            position: relative;
+        }
+
+        .details-modal-header h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .details-modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 2rem;
+            font-size: 2rem;
+            cursor: pointer;
+            color: white;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .details-modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .details-modal-body {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .details-modal-image {
+            width: 100%;
+            height: 400px;
+            border-radius: 15px;
+            background-size: cover;
+            background-position: center;
+            box-shadow: var(--shadow);
+        }
+
+        .details-modal-info h3 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .details-modal-price {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 1rem 0;
+        }
+
+        .details-modal-description {
+            color: var(--text-light);
+            line-height: 1.8;
+            margin: 1.5rem 0;
+        }
+
+        .details-modal-features {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        .details-modal-features li {
+            padding: 0.5rem 0;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .details-modal-features li i {
+            color: var(--accent);
+        }
+
+        .details-modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .details-modal-body {
+                grid-template-columns: 1fr;
+            }
+
+            .details-modal-image {
+                height: 300px;
+            }
+
+            .catalog-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <i class="fas fa-seedling"></i>
+                <span>Flowers F</span>
+            </div>
+            
+            <div class="nav-links">
+                <a href="flowers.html">Главная</a>
+                <a href="categories.html">Каталог</a>
+                <a href="contacts.html">Контакты</a>
+            </div>
+            
+            <div class="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Catalog Header -->
+    <div class="catalog-header">
+        <h1>Каталог цветов и букетов</h1>
+        <p>Выберите идеальный букет для любого случая</p>
+    </div>
+
+    <!-- Catalog Section -->
+    <section class="section">
+        <div class="products">
+            <!-- Товар 1 -->
+            <div class="product-card">
+                <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1563241527-3004b7be0ffd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');"></div>
+                <div class="product-content">
+                    <h3>Букет "Нежность"</h3>
+                    <p>Композиция из роз и пионов</p>
+                    <div class="product-price">2 500 ₽</div>
+                    <div class="product-actions">
+                        <button class="btn-details" onclick="openDetails(0)">Подробнее</button>
+                        <button class="btn btn-outline order-btn" data-product="Букет &quot;Нежность&quot;" data-price="2 500 ₽">Заказать</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Товар 2 -->
+            <div class="product-card">
+                <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1487070183333-3ce2f5c9c979?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');"></div>
+                <div class="product-content">
+                    <h3>Букет "Элегантность"</h3>
+                    <p>Орхидеи и лилии в изысканной композиции</p>
+                    <div class="product-price">3 200 ₽</div>
+                    <div class="product-actions">
+                        <button class="btn-details" onclick="openDetails(1)">Подробнее</button>
+                        <button class="btn btn-outline order-btn" data-product="Букет &quot;Элегантность&quot;" data-price="3 200 ₽">Заказать</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Товар 3 -->
+            <div class="product-card">
+                <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1572451479139-8d57dd2da20c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');"></div>
+                <div class="product-content">
+                    <h3>Букет "Весенний"</h3>
+                    <p>Тюльпаны и гиацинты в яркой композиции</p>
+                    <div class="product-price">1 800 ₽</div>
+                    <div class="product-actions">
+                        <button class="btn-details" onclick="openDetails(2)">Подробнее</button>
+                        <button class="btn btn-outline order-btn" data-product="Букет &quot;Весенний&quot;" data-price="1 800 ₽">Заказать</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Товар 4 -->
+            <div class="product-card">
+                <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1573992554016-98e0b4e0bf31?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');"></div>
+                <div class="product-content">
+                    <h3>Букет "Роскошь"</h3>
+                    <p>Экзотические цветы в премиальной упаковке</p>
+                    <div class="product-price">5 500 ₽</div>
+                    <div class="product-actions">
+                        <button class="btn-details" onclick="openDetails(3)">Подробнее</button>
+                        <button class="btn btn-outline order-btn" data-product="Букет &quot;Роскошь&quot;" data-price="5 500 ₽">Заказать</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Товар 5 -->
+            <div class="product-card">
+                <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1518895949257-7621c3c786d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');"></div>
+                <div class="product-content">
+                    <h3>Букет "Классика"</h3>
+                    <p>Красные розы в классической композиции</p>
+                    <div class="product-price">2 200 ₽</div>
+                    <div class="product-actions">
+                        <button class="btn-details" onclick="openDetails(4)">Подробнее</button>
+                        <button class="btn btn-outline order-btn" data-product="Букет &quot;Классика&quot;" data-price="2 200 ₽">Заказать</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Товар 6 -->
+            <div class="product-card">
+                <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');"></div>
+                <div class="product-content">
+                    <h3>Букет "Мечта"</h3>
+                    <p>Пионы и розы в нежной пастельной гамме</p>
+                    <div class="product-price">3 500 ₽</div>
+                    <div class="product-actions">
+                        <button class="btn-details" onclick="openDetails(5)">Подробнее</button>
+                        <button class="btn btn-outline order-btn" data-product="Букет &quot;Мечта&quot;" data-price="3 500 ₽">Заказать</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Товар 7 -->
+            <div class="product-card">
+                <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');"></div>
+                <div class="product-content">
+                    <h3>Букет "Страсть"</h3>
+                    <p>Яркие алые розы с зеленью</p>
+                    <div class="product-price">2 800 ₽</div>
+                    <div class="product-actions">
+                        <button class="btn-details" onclick="openDetails(6)">Подробнее</button>
+                        <button class="btn btn-outline order-btn" data-product="Букет &quot;Страсть&quot;" data-price="2 800 ₽">Заказать</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Товар 8 -->
+            <div class="product-card">
+                <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1578301978162-7aae4d755744?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');"></div>
+                <div class="product-content">
+                    <h3>Букет "Вдохновение"</h3>
+                    <p>Смешанный букет из полевых цветов</p>
+                    <div class="product-price">1 500 ₽</div>
+                    <div class="product-actions">
+                        <button class="btn-details" onclick="openDetails(7)">Подробнее</button>
+                        <button class="btn btn-outline order-btn" data-product="Букет &quot;Вдохновение&quot;" data-price="1 500 ₽">Заказать</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Товар 9 -->
+            <div class="product-card">
+                <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');"></div>
+                <div class="product-content">
+                    <h3>Букет "Гармония"</h3>
+                    <p>Белые розы и эвкалипт</p>
+                    <div class="product-price">2 600 ₽</div>
+                    <div class="product-actions">
+                        <button class="btn-details" onclick="openDetails(8)">Подробнее</button>
+                        <button class="btn btn-outline order-btn" data-product="Букет &quot;Гармония&quot;" data-price="2 600 ₽">Заказать</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Товар 10 -->
+            <div class="product-card">
+                <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1606041011872-b77b0f8a0e0a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');"></div>
+                <div class="product-content">
+                    <h3>Букет "Радость"</h3>
+                    <p>Солнечные подсолнухи и ромашки</p>
+                    <div class="product-price">1 900 ₽</div>
+                    <div class="product-actions">
+                        <button class="btn-details" onclick="openDetails(9)">Подробнее</button>
+                        <button class="btn btn-outline order-btn" data-product="Букет &quot;Радость&quot;" data-price="1 900 ₽">Заказать</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Товар 11 -->
+            <div class="product-card">
+                <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1606800057525-f9f6b0f8c813?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');"></div>
+                <div class="product-content">
+                    <h3>Букет "Любовь"</h3>
+                    <p>Розовые розы и пионы</p>
+                    <div class="product-price">3 000 ₽</div>
+                    <div class="product-actions">
+                        <button class="btn-details" onclick="openDetails(10)">Подробнее</button>
+                        <button class="btn btn-outline order-btn" data-product="Букет &quot;Любовь&quot;" data-price="3 000 ₽">Заказать</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Товар 12 -->
+            <div class="product-card">
+                <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1606041011872-8a8c0b0e5b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');"></div>
+                <div class="product-content">
+                    <h3>Букет "Экзотика"</h3>
+                    <p>Орхидеи и тропические цветы</p>
+                    <div class="product-price">4 500 ₽</div>
+                    <div class="product-actions">
+                        <button class="btn-details" onclick="openDetails(11)">Подробнее</button>
+                        <button class="btn btn-outline order-btn" data-product="Букет &quot;Экзотика&quot;" data-price="4 500 ₽">Заказать</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Модальное окно с подробной информацией -->
+    <div class="details-modal" id="detailsModal">
+        <div class="details-modal-content">
+            <div class="details-modal-header">
+                <span class="details-modal-close" onclick="closeDetails()">&times;</span>
+                <h2 id="modalTitle">Букет "Нежность"</h2>
+                <p id="modalSubtitle">Композиция из роз и пионов</p>
+            </div>
+            <div class="details-modal-body">
+                <div class="details-modal-image" id="modalImage"></div>
+                <div class="details-modal-info">
+                    <div class="details-modal-price" id="modalPrice">2 500 ₽</div>
+                    <div class="details-modal-description" id="modalDescription">
+                        Прекрасный букет, созданный с любовью и вниманием к деталям. Идеально подходит для выражения нежных чувств.
+                    </div>
+                    <ul class="details-modal-features" id="modalFeatures">
+                        <li><i class="fas fa-check-circle"></i> Свежие цветы</li>
+                        <li><i class="fas fa-check-circle"></i> Профессиональная упаковка</li>
+                        <li><i class="fas fa-check-circle"></i> Доставка в день заказа</li>
+                    </ul>
+                    <div class="details-modal-actions">
+                        <button class="btn btn-primary" id="modalOrderBtn" style="flex: 1;">Оформить заказ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно заказа (из flowers.html) -->
+    <div class="modal" id="orderModal">
+        <div class="modal-content" style="max-width: 600px;">
+            <span class="close-modal" id="closeOrderModal">&times;</span>
+            <div class="modal-header">
+                <h3>Оформление заказа</h3>
+            </div>
+            <form id="orderForm">
+                <div class="form-group">
+                    <label>Товар</label>
+                    <input type="text" id="orderProductName" class="form-control" readonly style="background-color: #f5f5f5;">
+                </div>
+                
+                <div class="form-group">
+                    <label>Цена</label>
+                    <input type="text" id="orderProductPrice" class="form-control" readonly style="background-color: #f5f5f5;">
+                </div>
+                
+                <div class="form-group">
+                    <label for="orderName">Ваше имя *</label>
+                    <input type="text" id="orderName" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="orderPhone">Телефон *</label>
+                    <input type="tel" id="orderPhone" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="orderEmail">Email *</label>
+                    <input type="email" id="orderEmail" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="orderAddress">Адрес доставки</label>
+                    <input type="text" id="orderAddress" class="form-control" placeholder="Укажите адрес доставки">
+                </div>
+                
+                <div class="form-group">
+                    <label for="orderMessage">Комментарий к заказу</label>
+                    <textarea id="orderMessage" class="form-control" placeholder="Дополнительная информация о заказе"></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Отправить заказ</button>
+                
+                <div class="success-message" id="orderSuccessMessage">
+                    Спасибо! Ваш заказ отправлен. Мы свяжемся с вами в ближайшее время.
+                </div>
+                
+                <div class="error-message" id="orderErrorMessage" style="display: none; background-color: #f8d7da; color: #721c24; padding: 1rem; border-radius: 5px; margin-top: 1rem;">
+                    Произошла ошибка при отправке заказа. Пожалуйста, попробуйте еще раз.
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Данные о товарах
+        const products = [
+            {
+                title: 'Букет "Нежность"',
+                subtitle: 'Композиция из роз и пионов',
+                price: '2 500 ₽',
+                image: 'https://images.unsplash.com/photo-1563241527-3004b7be0ffd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                description: 'Прекрасный букет из нежных роз и пышных пионов создан для выражения самых теплых чувств. Идеально подходит для романтических моментов, признаний в любви и просто для того, чтобы порадовать близкого человека. Букет оформлен в нежной пастельной гамме и дополнен зеленью эвкалипта.',
+                features: [
+                    '11 розовых роз',
+                    '3 пиона',
+                    'Эвкалипт',
+                    'Профессиональная упаковка',
+                    'Лента в тон букета'
+                ]
+            },
+            {
+                title: 'Букет "Элегантность"',
+                subtitle: 'Орхидеи и лилии в изысканной композиции',
+                price: '3 200 ₽',
+                image: 'https://images.unsplash.com/photo-1487070183333-3ce2f5c9c979?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                description: 'Изысканная композиция из орхидей и лилий создана для особенных случаев. Этот букет подчеркнет ваш безупречный вкус и станет прекрасным подарком для важных людей в вашей жизни. Элегантность и утонченность в каждом лепестке.',
+                features: [
+                    '5 орхидей',
+                    '7 лилий',
+                    'Зелень папоротника',
+                    'Премиальная упаковка',
+                    'Поздравительная открытка'
+                ]
+            },
+            {
+                title: 'Букет "Весенний"',
+                subtitle: 'Тюльпаны и гиацинты в яркой композиции',
+                price: '1 800 ₽',
+                image: 'https://images.unsplash.com/photo-1572451479139-8d57dd2da20c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                description: 'Яркий и жизнерадостный букет, наполненный весенним настроением. Тюльпаны и гиацинты создают праздничную атмосферу и дарят ощущение свежести и обновления. Идеальный выбор для поднятия настроения!',
+                features: [
+                    '15 тюльпанов',
+                    '5 гиацинтов',
+                    'Весенняя зелень',
+                    'Яркая упаковка',
+                    'Доставка в день заказа'
+                ]
+            },
+            {
+                title: 'Букет "Роскошь"',
+                subtitle: 'Экзотические цветы в премиальной упаковке',
+                price: '5 500 ₽',
+                image: 'https://images.unsplash.com/photo-1573992554016-98e0b4e0bf31?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                description: 'Эксклюзивная композиция из редких экзотических цветов. Этот букет создан для тех, кто ценит роскошь и уникальность. Каждый цветок тщательно отобран, а упаковка выполнена в премиальном стиле.',
+                features: [
+                    'Экзотические цветы',
+                    'Редкие сорта',
+                    'Премиальная упаковка',
+                    'Подарочная коробка',
+                    'VIP доставка'
+                ]
+            },
+            {
+                title: 'Букет "Классика"',
+                subtitle: 'Красные розы в классической композиции',
+                price: '2 200 ₽',
+                image: 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                description: 'Классический букет из красных роз - вечная классика, которая никогда не выходит из моды. Идеальный выбор для выражения глубоких чувств и страсти. Этот букет говорит сам за себя.',
+                features: [
+                    '21 красная роза',
+                    'Зелень рускуса',
+                    'Классическая упаковка',
+                    'Красная лента',
+                    'Проверенное качество'
+                ]
+            },
+            {
+                title: 'Букет "Мечта"',
+                subtitle: 'Пионы и розы в нежной пастельной гамме',
+                price: '3 500 ₽',
+                image: 'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                description: 'Нежный и воздушный букет, словно сошедший со страниц сказки. Пионы и розы в пастельных тонах создают атмосферу нежности и мечтательности. Идеален для романтических моментов.',
+                features: [
+                    '7 пионов',
+                    '9 роз',
+                    'Гипсофила',
+                    'Нежная упаковка',
+                    'Пастельная лента'
+                ]
+            },
+            {
+                title: 'Букет "Страсть"',
+                subtitle: 'Яркие алые розы с зеленью',
+                price: '2 800 ₽',
+                image: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                description: 'Страстный и выразительный букет из алых роз. Каждая роза - это символ страсти и любви. Этот букет не оставит равнодушным и станет ярким акцентом любого события.',
+                features: [
+                    '15 алых роз',
+                    'Зелень эвкалипта',
+                    'Яркая упаковка',
+                    'Алая лента',
+                    'Экспресс доставка'
+                ]
+            },
+            {
+                title: 'Букет "Вдохновение"',
+                subtitle: 'Смешанный букет из полевых цветов',
+                price: '1 500 ₽',
+                image: 'https://images.unsplash.com/photo-1578301978162-7aae4d755744?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                description: 'Свежий и естественный букет из полевых цветов. Этот букет напоминает о летних лугах и дарит ощущение свободы и легкости. Идеален для тех, кто ценит природную красоту.',
+                features: [
+                    'Полевые цветы',
+                    'Разнообразие видов',
+                    'Эко-упаковка',
+                    'Льняная лента',
+                    'Свежесть гарантирована'
+                ]
+            },
+            {
+                title: 'Букет "Гармония"',
+                subtitle: 'Белые розы и эвкалипт',
+                price: '2 600 ₽',
+                image: 'https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                description: 'Гармоничная композиция из белых роз и эвкалипта. Чистота и элегантность в каждом элементе. Этот букет символизирует чистоту чувств и идеально подходит для свадеб и торжественных событий.',
+                features: [
+                    '13 белых роз',
+                    'Эвкалипт',
+                    'Белая упаковка',
+                    'Жемчужная лента',
+                    'Свадебный стиль'
+                ]
+            },
+            {
+                title: 'Букет "Радость"',
+                subtitle: 'Солнечные подсолнухи и ромашки',
+                price: '1 900 ₽',
+                image: 'https://images.unsplash.com/photo-1606041011872-b77b0f8a0e0a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                description: 'Яркий и позитивный букет, наполненный солнечной энергией. Подсолнухи и ромашки дарят радость и хорошее настроение. Идеальный подарок для поднятия духа!',
+                features: [
+                    '5 подсолнухов',
+                    'Ромашки',
+                    'Яркая упаковка',
+                    'Желтая лента',
+                    'Позитивное настроение'
+                ]
+            },
+            {
+                title: 'Букет "Любовь"',
+                subtitle: 'Розовые розы и пионы',
+                price: '3 000 ₽',
+                image: 'https://images.unsplash.com/photo-1606800057525-f9f6b0f8c813?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                description: 'Романтичный букет из розовых роз и пионов - символ нежной любви и привязанности. Этот букет выражает самые теплые чувства и станет прекрасным подарком для любимого человека.',
+                features: [
+                    '11 розовых роз',
+                    '5 пионов',
+                    'Розовая упаковка',
+                    'Атласная лента',
+                    'Романтический стиль'
+                ]
+            },
+            {
+                title: 'Букет "Экзотика"',
+                subtitle: 'Орхидеи и тропические цветы',
+                price: '4 500 ₽',
+                image: 'https://images.unsplash.com/photo-1606041011872-8a8c0b0e5b8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                description: 'Экзотическая композиция из редких тропических цветов и орхидей. Этот букет привлечет внимание и станет центром внимания на любом мероприятии. Для тех, кто ищет что-то особенное и уникальное.',
+                features: [
+                    '7 орхидей',
+                    'Тропические цветы',
+                    'Экзотическая зелень',
+                    'Премиальная упаковка',
+                    'Эксклюзивный дизайн'
+                ]
+            }
+        ];
+
+        // Функция открытия модального окна с подробной информацией
+        function openDetails(index) {
+            const product = products[index];
+            const modal = document.getElementById('detailsModal');
+            
+            document.getElementById('modalTitle').textContent = product.title;
+            document.getElementById('modalSubtitle').textContent = product.subtitle;
+            document.getElementById('modalPrice').textContent = product.price;
+            document.getElementById('modalImage').style.backgroundImage = `url('${product.image}')`;
+            document.getElementById('modalDescription').textContent = product.description;
+            
+            // Заполняем список особенностей
+            const featuresList = document.getElementById('modalFeatures');
+            featuresList.innerHTML = '';
+            product.features.forEach(feature => {
+                const li = document.createElement('li');
+                li.innerHTML = `<i class="fas fa-check-circle"></i> ${feature}`;
+                featuresList.appendChild(li);
+            });
+            
+            // Устанавливаем данные для кнопки заказа
+            const orderBtn = document.getElementById('modalOrderBtn');
+            orderBtn.onclick = () => {
+                closeDetails();
+                openOrderModal(product.title, product.price);
+            };
+            
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Функция закрытия модального окна
+        function closeDetails() {
+            document.getElementById('detailsModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Закрытие при клике вне модального окна
+        window.onclick = function(event) {
+            const modal = document.getElementById('detailsModal');
+            if (event.target === modal) {
+                closeDetails();
+            }
+        }
+
+        // Функция открытия модального окна заказа
+        function openOrderModal(productName, productPrice) {
+            document.getElementById('orderProductName').value = productName;
+            document.getElementById('orderProductPrice').value = productPrice;
+            document.getElementById('orderModal').style.display = 'flex';
+        }
+
+        // Обработка кнопок заказа
+        const orderButtons = document.querySelectorAll('.order-btn');
+        const orderModal = document.getElementById('orderModal');
+        const closeOrderModal = document.getElementById('closeOrderModal');
+        
+        orderButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const productName = button.getAttribute('data-product');
+                const productPrice = button.getAttribute('data-price');
+                openOrderModal(productName, productPrice);
+            });
+        });
+        
+        closeOrderModal.addEventListener('click', () => {
+            orderModal.style.display = 'none';
+        });
+        
+        window.addEventListener('click', (e) => {
+            if (e.target === orderModal) {
+                orderModal.style.display = 'none';
+            }
+        });
+
+        // Обработка формы заказа
+        const orderForm = document.getElementById('orderForm');
+        const orderSuccessMessage = document.getElementById('orderSuccessMessage');
+        const orderErrorMessage = document.getElementById('orderErrorMessage');
+        
+        // Email для получения заказов
+        const ORDER_EMAIL = 'jekfomai03@gmail.com';
+        
+        if (orderForm && orderSuccessMessage && orderErrorMessage) {
+            orderForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const orderData = {
+                    product_name: document.getElementById('orderProductName').value,
+                    product_price: document.getElementById('orderProductPrice').value,
+                    customer_name: document.getElementById('orderName').value,
+                    customer_phone: document.getElementById('orderPhone').value,
+                    customer_email: document.getElementById('orderEmail').value,
+                    delivery_address: document.getElementById('orderAddress').value,
+                    message: document.getElementById('orderMessage').value
+                };
+                
+                orderSuccessMessage.style.display = 'none';
+                orderErrorMessage.style.display = 'none';
+                
+                try {
+                    // Формируем тему письма
+                    const subject = encodeURIComponent(`Новый заказ: ${orderData.product_name}`);
+                    
+                    // Формируем текст письма
+                    const emailBody = `Новый заказ с сайта Flowers F
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📦 ИНФОРМАЦИЯ О ТОВАРЕ:
+Товар: ${orderData.product_name}
+Цена: ${orderData.product_price}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+👤 ДАННЫЕ КЛИЕНТА:
+Имя: ${orderData.customer_name}
+Телефон: ${orderData.customer_phone}
+Email: ${orderData.customer_email}
+Адрес доставки: ${orderData.delivery_address || 'Не указан'}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💬 КОММЕНТАРИЙ К ЗАКАЗУ:
+${orderData.message || 'Нет комментария'}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📅 Дата и время заказа: ${new Date().toLocaleString('ru-RU')}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
+                    
+                    // Кодируем тело письма для URL
+                    const encodedBody = encodeURIComponent(emailBody);
+                    
+                    // Создаем mailto ссылку
+                    const mailtoLink = `mailto:${ORDER_EMAIL}?subject=${subject}&body=${encodedBody}`;
+                    
+                    // Создаем временную ссылку и кликаем по ней
+                    const link = document.createElement('a');
+                    link.href = mailtoLink;
+                    link.style.display = 'none';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    
+                    // Показываем сообщение об успехе
+                    orderSuccessMessage.innerHTML = 'Спасибо! Откроется почтовый клиент для отправки заказа. Если почтовый клиент не открылся, отправьте заказ вручную на адрес: ' + ORDER_EMAIL;
+                    orderSuccessMessage.style.display = 'block';
+                    
+                    // Сбрасываем форму
+                    orderForm.reset();
+                    
+                    // Закрываем модальное окно через 5 секунд
+                    setTimeout(() => {
+                        orderModal.style.display = 'none';
+                        orderSuccessMessage.style.display = 'none';
+                        orderSuccessMessage.innerHTML = 'Спасибо! Ваш заказ отправлен. Мы свяжемся с вами в ближайшее время.';
+                    }, 5000);
+                    
+                } catch (error) {
+                    console.error('Error sending order:', error);
+                    orderErrorMessage.style.display = 'block';
+                    orderErrorMessage.textContent = 'Произошла ошибка при отправке заказа. Пожалуйста, попробуйте еще раз или свяжитесь с нами напрямую.';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+

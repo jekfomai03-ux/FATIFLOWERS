@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контакты - Flowers F</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .contacts-header {
+            text-align: center;
+            padding: 4rem 5%;
+            background: var(--gradient-primary);
+            color: white;
+            margin-bottom: 3rem;
+        }
+
+        .contacts-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .contacts-header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            color: white;
+            text-decoration: none;
+            padding: 0.7rem 1.5rem;
+            border: 2px solid white;
+            border-radius: 50px;
+            transition: var(--transition);
+        }
+
+        .back-link:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        .contacts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 5%;
+        }
+
+        .contact-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .contact-card h3 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .contact-card h3 i {
+            color: var(--secondary);
+        }
+
+        .contact-info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .contact-info-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .contact-info-item i {
+            font-size: 1.5rem;
+            color: var(--primary);
+            min-width: 30px;
+            margin-top: 0.2rem;
+        }
+
+        .contact-info-item-content h4 {
+            color: var(--text);
+            margin-bottom: 0.3rem;
+            font-weight: 600;
+        }
+
+        .contact-info-item-content p {
+            color: var(--text-light);
+            margin: 0;
+        }
+
+        .contact-info-item-content a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .contact-info-item-content a:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        .map-container {
+            grid-column: 1 / -1;
+            height: 400px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin-top: 2rem;
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .social-section {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem;
+            background: var(--gradient-primary);
+            border-radius: 15px;
+            color: white;
+            margin-top: 2rem;
+        }
+
+        .social-section h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-links-large {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .social-links-large a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5rem;
+            transition: var(--transition);
+            text-decoration: none;
+        }
+
+        .social-links-large a:hover {
+            background-color: white;
+            color: var(--primary);
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        @media (max-width: 992px) {
+            .contacts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contacts-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <i class="fas fa-seedling"></i>
+                <span>Flowers F</span>
+            </div>
+            
+            <div class="nav-links">
+                <a href="flowers.html">Главная</a>
+                <a href="categories.html">Каталог</a>
+                <a href="contacts.html">Контакты</a>
+            </div>
+            
+            <div class="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Contacts Header -->
+    <div class="contacts-header">
+        <h1>Наши контакты</h1>
+        <p>Мы всегда рады помочь вам выбрать идеальный букет</p>
+        <a href="flowers.html" class="back-link">
+            <i class="fas fa-arrow-left"></i> Вернуться на главную
+        </a>
+    </div>
+
+    <!-- Contacts Content -->
+    <section class="section">
+        <div class="contacts-grid">
+            <!-- Контактная информация -->
+            <div class="contact-card">
+                <h3><i class="fas fa-info-circle"></i> Контактная информация</h3>
+                
+                <div class="contact-info-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div class="contact-info-item-content">
+                        <h4>Адрес</h4>
+                        <p>ул. Цветочная, 15, Москва, Россия</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Ближайшее метро: Цветной бульвар</p>
+                    </div>
+                </div>
+
+                <div class="contact-info-item">
+                    <i class="fas fa-phone"></i>
+                    <div class="contact-info-item-content">
+                        <h4>Телефон</h4>
+                        <p><a href="tel:+74951234567">+7 (495) 123-45-67</a></p>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Звонки принимаются ежедневно</p>
+                    </div>
+                </div>
+
+                <div class="contact-info-item">
+                    <i class="fas fa-envelope"></i>
+                    <div class="contact-info-item-content">
+                        <h4>Email</h4>
+                        <p><a href="mailto:jekfomai03@gmail.com">jekfomai03@gmail.com</a></p>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Ответим в течение 24 часов</p>
+                    </div>
+                </div>
+
+                <div class="contact-info-item">
+                    <i class="fas fa-clock"></i>
+                    <div class="contact-info-item-content">
+                        <h4>Часы работы</h4>
+                        <p>Понедельник - Воскресенье: 9:00 - 21:00</p>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem;">Без выходных</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Форма обратной связи -->
+            <div class="contact-card">
+                <h3><i class="fas fa-paper-plane"></i> Свяжитесь с нами</h3>
+                
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="contactName">Ваше имя *</label>
+                        <input type="text" id="contactName" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contactPhone">Телефон *</label>
+                        <input type="tel" id="contactPhone" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contactEmail">Email *</label>
+                        <input type="email" id="contactEmail" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contactMessage">Сообщение *</label>
+                        <textarea id="contactMessage" class="form-control" rows="5" placeholder="Расскажите о вашем заказе или задайте вопрос" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Отправить сообщение</button>
+                    
+                    <div class="success-message" id="contactSuccessMessage">
+                        Спасибо! Ваше сообщение отправлено. Мы свяжемся с вами в ближайшее время.
+                    </div>
+                    
+                    <div class="error-message" id="contactErrorMessage" style="display: none;">
+                        Произошла ошибка при отправке сообщения. Пожалуйста, попробуйте еще раз.
+                    </div>
+                </form>
+            </div>
+
+            <!-- Карта -->
+            <div class="map-container">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2245.0!2d37.6173!3d55.7558!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNTXCsDQ1JzIwLjkiTiAzN8KwMzcnMDIuMyJF!5e0!3m2!1sru!2sru!4v1234567890123!5m2!1sru!2sru" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+
+            <!-- Социальные сети -->
+            <div class="social-section">
+                <h3>Мы в социальных сетях</h3>
+                <p style="margin-bottom: 2rem; opacity: 0.9;">Подписывайтесь на нас, чтобы быть в курсе новинок и акций</p>
+                <div class="social-links-large">
+                    <a href="#" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" title="ВКонтакте">
+                        <i class="fab fa-vk"></i>
+                    </a>
+                    <a href="#" title="Telegram">
+                        <i class="fab fa-telegram"></i>
+                    </a>
+                    <a href="https://wa.me/89284925580" title="WhatsApp" target="_blank">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>Flowers F</h3>
+                <p>Мы создаем красивые цветочные композиции, которые дарят радость и выражают ваши чувства.</p>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Быстрые ссылки</h3>
+                <ul class="footer-links">
+                    <li><a href="flowers.html">Главная</a></li>
+                    <li><a href="categories.html">Каталог</a></li>
+                    <li><a href="contacts.html">Контакты</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Контакты</h3>
+                <ul class="footer-links">
+                    <li><a href="tel:+74951234567">+7 (495) 123-45-67</a></li>
+                    <li><a href="mailto:jekfomai03@gmail.com">jekfomai03@gmail.com</a></li>
+                    <li>ул. Цветочная, 15, Москва</li>
+                    <li>Пн-Вс: 9:00 - 21:00</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>&copy; 2023 Flowers F. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Обработка формы обратной связи
+        const contactForm = document.getElementById('contactForm');
+        const contactSuccessMessage = document.getElementById('contactSuccessMessage');
+        const contactErrorMessage = document.getElementById('contactErrorMessage');
+        
+        // Email для получения сообщений
+        const CONTACT_EMAIL = 'jekfomai03@gmail.com';
+        
+        if (contactForm && contactSuccessMessage && contactErrorMessage) {
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const contactData = {
+                    name: document.getElementById('contactName').value,
+                    phone: document.getElementById('contactPhone').value,
+                    email: document.getElementById('contactEmail').value,
+                    message: document.getElementById('contactMessage').value
+                };
+                
+                contactSuccessMessage.style.display = 'none';
+                contactErrorMessage.style.display = 'none';
+                
+                try {
+                    // Формируем тему письма
+                    const subject = encodeURIComponent(`Сообщение с сайта Flowers F от ${contactData.name}`);
+                    
+                    // Формируем текст письма
+                    const emailBody = `Новое сообщение с сайта Flowers F
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+👤 ДАННЫЕ ОТПРАВИТЕЛЯ:
+Имя: ${contactData.name}
+Телефон: ${contactData.phone}
+Email: ${contactData.email}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💬 СООБЩЕНИЕ:
+${contactData.message}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📅 Дата и время: ${new Date().toLocaleString('ru-RU')}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
+                    
+                    // Кодируем тело письма для URL
+                    const encodedBody = encodeURIComponent(emailBody);
+                    
+                    // Создаем mailto ссылку
+                    const mailtoLink = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${encodedBody}`;
+                    
+                    // Создаем временную ссылку и кликаем по ней
+                    const link = document.createElement('a');
+                    link.href = mailtoLink;
+                    link.style.display = 'none';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    
+                    // Показываем сообщение об успехе
+                    contactSuccessMessage.style.display = 'block';
+                    contactForm.reset();
+                    
+                    // Скрываем сообщение через 5 секунд
+                    setTimeout(() => {
+                        contactSuccessMessage.style.display = 'none';
+                    }, 5000);
+                    
+                } catch (error) {
+                    console.error('Error sending message:', error);
+                    contactErrorMessage.style.display = 'block';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+
